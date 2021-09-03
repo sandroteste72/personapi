@@ -7,4 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/people")
 public class PersonController {
 
+    public String getString() {
+        return "API Person DIO";
+    }
 }
