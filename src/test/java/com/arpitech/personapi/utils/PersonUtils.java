@@ -2,6 +2,10 @@ package com.arpitech.personapi.utils;
 
 import com.arpitech.personapi.dto.request.PersonDTO;
 import com.arpitech.personapi.entity.Person;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -9,7 +13,7 @@ import java.util.Collections;
 public class PersonUtils {
     private static final String FIRST_NAME = "Sandro";
     private static final String LAST_NAME = "Arpi";
-    private static final String CPF_NUMBER = "369.333.878-79";
+    private static final String CPF_NUMBER = "014.868.907-84";
     private static final long PERSON_ID = 1L;
     public static final LocalDate BIRTH_DATE = LocalDate.of(1972, 11, 20);
 
@@ -32,5 +36,18 @@ public class PersonUtils {
                 .birthDate(BIRTH_DATE)
                 .phones(Collections.singletonList(PhoneUtils.createFakeEntity()))
                 .build();
+    }
+
+    public static String asJsonString(PersonDTO personDTO) {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
+            objectMapper.registerModules(new JavaTimeModule());
+
+            return objectMapper.writeValueAsString(personDTO);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
